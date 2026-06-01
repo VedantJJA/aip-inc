@@ -28,6 +28,10 @@ export const metadata: Metadata = {
 
 import { prisma } from "@/lib/prisma";
 
+// Force all pages to be server-rendered at request time (not at build time).
+// This prevents build failures from DB queries during static generation.
+export const dynamic = "force-dynamic";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
