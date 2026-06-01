@@ -18,6 +18,8 @@ export async function GET(
         budget: true,
         timeline: true,
         status: true,
+        currentMilestone: true,
+        progressPercent: true,
         createdAt: true,
         service: { select: { title: true } },
         assignedTeam: { select: { name: true } }

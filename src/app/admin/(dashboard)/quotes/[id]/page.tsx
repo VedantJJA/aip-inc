@@ -235,6 +235,8 @@ export default async function QuoteDetailPage({
             currentNotes={quote.adminNotes || ""}
             currentAssignee={quote.assignedToId}
             currentTeam={quote.assignedTeamId}
+            currentMilestone={quote.currentMilestone}
+            currentProgress={quote.progressPercent}
             teamMembers={teamMembers}
             teams={teams}
           />

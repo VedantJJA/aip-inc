@@ -1,4 +1,4 @@
-require("dotenv/config");
+try { require("dotenv/config"); } catch {}
 const { PrismaClient } = require("@prisma/client");
 const { PrismaBetterSqlite3 } = require("@prisma/adapter-better-sqlite3");
 const Database = require("better-sqlite3");
@@ -26,6 +26,24 @@ async function main() {
     },
   });
   console.log("Admin user created:", admin.email);
+
+  // Create demo customer
+  const customerEmail = "customer@aipinc.com";
+  const customerPassword = "customer123";
+  const customerHash = await bcrypt.hash(customerPassword, 12);
+
+  const customer = await prisma.customer.upsert({
+    where: { email: customerEmail },
+    update: {},
+    create: {
+      email: customerEmail,
+      passwordHash: customerHash,
+      name: "Demo Customer",
+      phone: "+1 (555) 999-0000",
+      company: "Demo Corp",
+    },
+  });
+  console.log("Demo customer created:", customer.email);
 
   const services = [
     {

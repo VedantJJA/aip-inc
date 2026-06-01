@@ -46,14 +46,36 @@ model QuoteRequest {
   adminNotes     String?
   assignedToId   String?  // Relation to single TeamMember
   assignedTeamId String?  // Relation to group Team
+
+  // ─── Customer & Project Tracking ──────────────────────────────────────────
+  customerId       String?  // FK to Customer (null for anonymous quotes)
+  currentMilestone String   @default("SUBMITTED") // SUBMITTED | UNDER_REVIEW | PROPOSAL_SENT | IN_PROGRESS | TESTING | DELIVERED | CLOSED
+  progressPercent  Int      @default(0)           // 0–100 completion percentage
+
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  assignedTo TeamMember?  @relation(fields: [assignedToId], references: [id])
-  assignedTeam Team?      @relation(fields: [assignedTeamId], references: [id])
+  service      Service      @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  assignedTo   TeamMember?  @relation(fields: [assignedToId], references: [id])
+  assignedTeam Team?        @relation(fields: [assignedTeamId], references: [id])
+  customer     Customer?    @relation(fields: [customerId], references: [id])
 
   @@map("quote_requests")
+}
+
+model Customer {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  phone        String?
+  company      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  quoteRequests QuoteRequest[]
+
+  @@map("customers")
 }
 
 model SiteSetting {
@@ -106,3 +128,4 @@ model Team {
 
   @@map("teams")
 }
+

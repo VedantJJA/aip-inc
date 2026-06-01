@@ -31,6 +31,7 @@ export const quoteRequestSchema = z.object({
   projectDetails: z.string().min(20, "Please provide at least 20 characters of detail"),
   budget: z.enum(["UNDER_1K", "ONE_TO_5K", "FIVE_TO_10K", "TEN_TO_25K", "ABOVE_25K"]),
   timeline: z.enum(["ASAP", "ONE_MONTH", "ONE_TO_3_MONTHS", "THREE_PLUS_MONTHS", "FLEXIBLE"]),
+  customerId: z.string().optional(),
 });
 
 export type QuoteRequestFormData = z.infer<typeof quoteRequestSchema>;
@@ -64,6 +65,8 @@ export const quoteStatusUpdateSchema = z.object({
   adminNotes: z.string().optional(),
   assignedToId: z.string().nullable().optional(),
   assignedTeamId: z.string().nullable().optional(),
+  currentMilestone: z.enum(["SUBMITTED", "UNDER_REVIEW", "PROPOSAL_SENT", "IN_PROGRESS", "TESTING", "DELIVERED", "CLOSED"]).optional(),
+  progressPercent: z.number().int().min(0).max(100).optional(),
 });
 
 export type QuoteStatusUpdateData = z.infer<typeof quoteStatusUpdateSchema>;

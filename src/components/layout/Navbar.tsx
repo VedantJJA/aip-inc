@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { Menu, X, Zap } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, X, Zap, LogIn, LayoutDashboard } from "lucide-react";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -13,6 +13,17 @@ const navLinks = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check if customer session exists
+  useEffect(() => {
+    fetch("/api/auth/customer/session")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.user) setIsLoggedIn(true);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <nav
@@ -105,9 +116,26 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link href="/quote" className="btn-primary" style={{ marginLeft: 8, padding: "10px 22px", fontSize: "0.85rem" }}>
-            Request Quote
-          </Link>
+
+          {isLoggedIn ? (
+            <Link
+              href="/dashboard"
+              className="btn-primary"
+              style={{ marginLeft: 8, padding: "10px 22px", fontSize: "0.85rem" }}
+            >
+              <LayoutDashboard size={16} />
+              My Projects
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="btn-primary"
+              style={{ marginLeft: 8, padding: "10px 22px", fontSize: "0.85rem" }}
+            >
+              <LogIn size={16} />
+              Login / Register
+            </Link>
+          )}
         </div>
 
         {/* Mobile Toggle */}
@@ -156,14 +184,27 @@ export default function Navbar() {
             </Link>
           ))}
           <div style={{ padding: "8px 16px" }}>
-            <Link
-              href="/quote"
-              className="btn-primary"
-              onClick={() => setIsOpen(false)}
-              style={{ width: "100%", justifyContent: "center" }}
-            >
-              Request Quote
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                href="/dashboard"
+                className="btn-primary"
+                onClick={() => setIsOpen(false)}
+                style={{ width: "100%", justifyContent: "center" }}
+              >
+                <LayoutDashboard size={16} />
+                My Projects
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="btn-primary"
+                onClick={() => setIsOpen(false)}
+                style={{ width: "100%", justifyContent: "center" }}
+              >
+                <LogIn size={16} />
+                Login / Register
+              </Link>
+            )}
           </div>
         </div>
       )}

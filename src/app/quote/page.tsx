@@ -23,6 +23,14 @@ interface FormData {
   timeline: string;
 }
 
+interface CustomerSession {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  company?: string;
+}
+
 export default function QuotePage() {
   const searchParams = useSearchParams();
   const preselectedService = searchParams.get("service") || "";
@@ -31,12 +39,14 @@ export default function QuotePage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [customer, setCustomer] = useState<CustomerSession | null>(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    setValue,
   } = useForm<FormData>({
     defaultValues: {
       serviceId: preselectedService,
@@ -54,7 +64,19 @@ export default function QuotePage() {
         if (res.success) setServices(res.data);
       })
       .catch(() => {});
-  }, []);
+
+    // Check if customer is logged in and auto-fill their info
+    fetch("/api/auth/customer/session")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.user) {
+          setCustomer(data.user);
+          if (data.user.name) setValue("clientName", data.user.name);
+          if (data.user.email) setValue("clientEmail", data.user.email);
+        }
+      })
+      .catch(() => {});
+  }, [setValue]);
 
   const selectedService = services.find((s) => s.id === selectedServiceId);
 
@@ -65,7 +87,10 @@ export default function QuotePage() {
       const res = await fetch("/api/quotes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          customerId: customer?.id || undefined,
+        }),
       });
       const result = await res.json();
       if (result.success) {

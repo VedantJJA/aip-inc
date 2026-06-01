@@ -4,12 +4,24 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Save, Loader2 } from "lucide-react";
 
+const milestoneOptions = [
+  { value: "SUBMITTED", label: "Submitted", progress: 0 },
+  { value: "UNDER_REVIEW", label: "Under Review", progress: 15 },
+  { value: "PROPOSAL_SENT", label: "Proposal Sent", progress: 30 },
+  { value: "IN_PROGRESS", label: "In Progress", progress: 50 },
+  { value: "TESTING", label: "Testing & QA", progress: 75 },
+  { value: "DELIVERED", label: "Delivered", progress: 95 },
+  { value: "CLOSED", label: "Closed", progress: 100 },
+];
+
 export default function QuoteStatusForm({
   quoteId,
   currentStatus,
   currentNotes,
   currentAssignee,
   currentTeam,
+  currentMilestone,
+  currentProgress,
   teamMembers,
   teams,
 }: {
@@ -18,6 +30,8 @@ export default function QuoteStatusForm({
   currentNotes: string;
   currentAssignee: string | null;
   currentTeam: string | null;
+  currentMilestone: string;
+  currentProgress: number;
   teamMembers: { id: string; name: string }[];
   teams: { id: string; name: string }[];
 }) {
@@ -26,8 +40,17 @@ export default function QuoteStatusForm({
   const [notes, setNotes] = useState(currentNotes);
   const [assignedToId, setAssignedToId] = useState(currentAssignee || "");
   const [assignedTeamId, setAssignedTeamId] = useState(currentTeam || "");
+  const [milestone, setMilestone] = useState(currentMilestone || "SUBMITTED");
+  const [progress, setProgress] = useState(currentProgress || 0);
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  const handleMilestoneChange = (value: string) => {
+    setMilestone(value);
+    // Auto-set progress based on milestone
+    const option = milestoneOptions.find((o) => o.value === value);
+    if (option) setProgress(option.progress);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,11 +61,13 @@ export default function QuoteStatusForm({
       const res = await fetch(`/api/quotes/${quoteId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          status, 
-          adminNotes: notes, 
+        body: JSON.stringify({
+          status,
+          adminNotes: notes,
           assignedToId: assignedToId || null,
-          assignedTeamId: assignedTeamId || null
+          assignedTeamId: assignedTeamId || null,
+          currentMilestone: milestone,
+          progressPercent: progress,
         }),
       });
 
@@ -91,6 +116,76 @@ export default function QuoteStatusForm({
           <option value="REJECTED">Rejected</option>
           <option value="CLOSED">Closed (Archived)</option>
         </select>
+      </div>
+
+      {/* Project Milestone Tracker */}
+      <div
+        style={{
+          padding: 16,
+          background: "var(--bg-secondary)",
+          borderRadius: "var(--radius-md)",
+          border: "1px solid var(--border-primary)",
+          marginBottom: 16,
+        }}
+      >
+        <h4
+          style={{
+            fontSize: "0.8rem",
+            fontWeight: 600,
+            color: "var(--accent-light)",
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+            marginBottom: 12,
+          }}
+        >
+          📦 Client Milestone Tracker
+        </h4>
+
+        <div style={{ marginBottom: 12 }}>
+          <label className="form-label">Current Milestone</label>
+          <select
+            className="form-select"
+            value={milestone}
+            onChange={(e) => handleMilestoneChange(e.target.value)}
+          >
+            {milestoneOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="form-label">
+            Progress: {progress}%
+          </label>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={progress}
+            onChange={(e) => setProgress(Number(e.target.value))}
+            style={{
+              width: "100%",
+              accentColor: "var(--accent)",
+              cursor: "pointer",
+            }}
+          />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              fontSize: "0.7rem",
+              color: "var(--text-muted)",
+              marginTop: 4,
+            }}
+          >
+            <span>0%</span>
+            <span>50%</span>
+            <span>100%</span>
+          </div>
+        </div>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
