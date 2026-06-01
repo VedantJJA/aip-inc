@@ -27,6 +27,19 @@ export default function AdminLoginPage() {
       setError("Invalid email or password");
       setLoading(false);
     } else {
+      // Check if the logged-in user is actually an admin
+      const sessionRes = await fetch("/api/auth/session");
+      const session = await sessionRes.json();
+      const role = session?.user?.role;
+
+      if (role === "CUSTOMER") {
+        // Sign out the customer and show error
+        await fetch("/api/auth/signout", { method: "POST" });
+        setError("This login is for administrators only. Please use the client portal.");
+        setLoading(false);
+        return;
+      }
+
       router.push("/admin");
       router.refresh();
     }

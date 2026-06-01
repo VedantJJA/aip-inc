@@ -13,6 +13,12 @@ export default async function AdminLayout({
     redirect("/admin/login");
   }
 
+  // Block customer accounts from accessing admin panel
+  const role = (session.user as any).role;
+  if (role === "CUSTOMER") {
+    redirect("/dashboard");
+  }
+
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <AdminSidebar userName={session.user.name || "Admin"} />

@@ -89,53 +89,63 @@ export default async function AdminQuotesPage() {
                 <th>Timeline</th>
                 <th>Status</th>
                 <th>Date</th>
+                <th style={{ textAlign: "right" }}></th>
               </tr>
             </thead>
             <tbody>
               {quotes.map((quote) => {
                 const statusInfo = getStatusInfo(quote.status);
                 return (
-                  <tr key={quote.id} style={{ cursor: "pointer" }}>
+                  <tr key={quote.id}>
                     <td>
-                      <Link
-                        href={`/admin/quotes/${quote.id}`}
+                      <span
                         style={{
                           color: "var(--text-primary)",
                           fontWeight: 500,
-                          textDecoration: "none",
                         }}
                       >
                         {quote.clientName}
-                      </Link>
+                      </span>
                       <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
                         {quote.clientEmail}
                       </div>
                     </td>
                     <td style={{ fontSize: "0.85rem" }}>
-                      <Link href={`/admin/quotes/${quote.id}`} style={{ color: "inherit", textDecoration: "none" }}>
-                        {quote.service.title}
-                      </Link>
+                      {quote.service.title}
                     </td>
                     <td style={{ fontSize: "0.85rem" }}>
-                      <Link href={`/admin/quotes/${quote.id}`} style={{ color: "inherit", textDecoration: "none" }}>
-                        {getBudgetLabel(quote.budget)}
-                      </Link>
+                      {getBudgetLabel(quote.budget)}
                     </td>
                     <td style={{ fontSize: "0.85rem" }}>
-                      <Link href={`/admin/quotes/${quote.id}`} style={{ color: "inherit", textDecoration: "none" }}>
-                        {getTimelineLabel(quote.timeline)}
-                      </Link>
+                      {getTimelineLabel(quote.timeline)}
                     </td>
                     <td>
-                      <Link href={`/admin/quotes/${quote.id}`} style={{ textDecoration: "none" }}>
-                        <span className={`badge ${statusInfo.color}`}>
-                          {statusInfo.label}
-                        </span>
-                      </Link>
+                      <span className={`badge ${statusInfo.color}`}>
+                        {statusInfo.label}
+                      </span>
                     </td>
                     <td style={{ fontSize: "0.85rem", whiteSpace: "nowrap" }}>
-                      <Link href={`/admin/quotes/${quote.id}`} style={{ color: "inherit", textDecoration: "none" }}>
-                        {formatDate(quote.createdAt)}
+                      {formatDate(quote.createdAt)}
+                    </td>
+                    <td style={{ textAlign: "right" }}>
+                      <Link
+                        href={`/admin/quotes/${quote.id}`}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 4,
+                          padding: "6px 14px",
+                          fontSize: "0.8rem",
+                          fontWeight: 600,
+                          color: "var(--accent-light)",
+                          background: "transparent",
+                          border: "none",
+                          borderRadius: "var(--radius-sm)",
+                          textDecoration: "none",
+                          transition: "all var(--transition-fast)",
+                        }}
+                      >
+                        View →
                       </Link>
                     </td>
                   </tr>
