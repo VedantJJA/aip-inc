@@ -1,19 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
-import path from "path";
 
-// Resolve the DB path — strip the "file:" prefix if present and make it absolute
-const rawUrl = process.env.DATABASE_URL || "file:./prisma/dev.db";
-const dbPath = rawUrl.startsWith("file:")
-  ? rawUrl.slice(5) // remove "file:" prefix
-  : rawUrl;
-
-// Resolve relative paths against the project root (process.cwd())
-const resolvedPath = path.isAbsolute(dbPath)
-  ? dbPath
-  : path.resolve(process.cwd(), dbPath);
-
-const adapter = new PrismaBetterSqlite3({ url: resolvedPath });
+// Pass the DATABASE_URL directly to the adapter — it handles the "file:" prefix internally
+const adapter = new PrismaBetterSqlite3({ url: process.env.DATABASE_URL || "file:./prisma/dev.db" });
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
