@@ -60,7 +60,7 @@ export default async function ServiceDetailPage({
           className="section"
           style={{
             background:
-              "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(108, 92, 231, 0.1), transparent)",
+              "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59, 130, 246, 0.1), transparent)",
           }}
         >
           <div className="container">
@@ -109,7 +109,7 @@ export default async function ServiceDetailPage({
                     style={{
                       background:
                         service.category === "SOFTWARE"
-                          ? "rgba(108, 92, 231, 0.15)"
+                          ? "rgba(59, 130, 246, 0.15)"
                           : "rgba(0, 184, 148, 0.15)",
                       color:
                         service.category === "SOFTWARE"

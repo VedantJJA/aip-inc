@@ -28,7 +28,7 @@ export default async function CTASection() {
           height: 400,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(108, 92, 231, 0.1), transparent 60%)",
+            "radial-gradient(circle, rgba(59, 130, 246, 0.1), transparent 60%)",
           pointerEvents: "none",
         }}
       />

@@ -137,7 +137,7 @@ export default function DashboardPage() {
               width: 72,
               height: 72,
               borderRadius: "50%",
-              background: "rgba(108, 92, 231, 0.1)",
+              background: "rgba(59, 130, 246, 0.1)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",

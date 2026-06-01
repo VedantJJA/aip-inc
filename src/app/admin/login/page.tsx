@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
         alignItems: "center",
         justifyContent: "center",
         background:
-          "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(108, 92, 231, 0.12), transparent), var(--bg-primary)",
+          "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.12), transparent), var(--bg-primary)",
       }}
     >
       <div

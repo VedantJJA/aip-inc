@@ -172,7 +172,7 @@ export default function QuotePage() {
           className="section"
           style={{
             background:
-              "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(108, 92, 231, 0.1), transparent)",
+              "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59, 130, 246, 0.1), transparent)",
           }}
         >
           <div className="container">
@@ -244,8 +244,8 @@ export default function QuotePage() {
                 <div
                   style={{
                     padding: "12px 16px",
-                    background: "rgba(108, 92, 231, 0.08)",
-                    border: "1px solid rgba(108, 92, 231, 0.2)",
+                    background: "rgba(59, 130, 246, 0.08)",
+                    border: "1px solid rgba(59, 130, 246, 0.2)",
                     borderRadius: "var(--radius-md)",
                     marginBottom: 24,
                     fontSize: "0.85rem",

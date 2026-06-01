@@ -84,6 +84,8 @@ async function main() {
   const settings = [
     { key: "company_name", value: "AIP Inc", label: "Company Name", group: "BRANDING" },
     { key: "company_tagline", value: "Building the Future, One Solution at a Time", label: "Tagline", group: "BRANDING" },
+    { key: "theme_color", value: "#3b82f6", label: "Theme Color", group: "BRANDING" },
+    { key: "currency", value: "USD", label: "Currency", group: "BRANDING" },
     { key: "company_email", value: "hello@aipinc.com", label: "Contact Email", group: "CONTACT" },
     { key: "company_phone", value: "+1 (555) 123-4567", label: "Phone Number", group: "CONTACT" },
     { key: "company_address", value: "123 Innovation Drive, Suite 100, San Francisco, CA 94105", label: "Physical Address", group: "CONTACT" },

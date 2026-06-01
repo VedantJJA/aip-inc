@@ -85,7 +85,7 @@ export default async function ServicesPreview() {
                   marginBottom: 12,
                   background:
                     service.category === "SOFTWARE"
-                      ? "rgba(108, 92, 231, 0.15)"
+                      ? "rgba(59, 130, 246, 0.15)"
                       : "rgba(0, 184, 148, 0.15)",
                   color:
                     service.category === "SOFTWARE"

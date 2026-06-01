@@ -95,7 +95,7 @@ export default async function AdminQuotesPage() {
               {quotes.map((quote) => {
                 const statusInfo = getStatusInfo(quote.status);
                 return (
-                  <tr key={quote.id}>
+                  <tr key={quote.id} style={{ cursor: "pointer" }}>
                     <td>
                       <Link
                         href={`/admin/quotes/${quote.id}`}
@@ -112,21 +112,31 @@ export default async function AdminQuotesPage() {
                       </div>
                     </td>
                     <td style={{ fontSize: "0.85rem" }}>
-                      {quote.service.title}
+                      <Link href={`/admin/quotes/${quote.id}`} style={{ color: "inherit", textDecoration: "none" }}>
+                        {quote.service.title}
+                      </Link>
                     </td>
                     <td style={{ fontSize: "0.85rem" }}>
-                      {getBudgetLabel(quote.budget)}
+                      <Link href={`/admin/quotes/${quote.id}`} style={{ color: "inherit", textDecoration: "none" }}>
+                        {getBudgetLabel(quote.budget)}
+                      </Link>
                     </td>
                     <td style={{ fontSize: "0.85rem" }}>
-                      {getTimelineLabel(quote.timeline)}
+                      <Link href={`/admin/quotes/${quote.id}`} style={{ color: "inherit", textDecoration: "none" }}>
+                        {getTimelineLabel(quote.timeline)}
+                      </Link>
                     </td>
                     <td>
-                      <span className={`badge ${statusInfo.color}`}>
-                        {statusInfo.label}
-                      </span>
+                      <Link href={`/admin/quotes/${quote.id}`} style={{ textDecoration: "none" }}>
+                        <span className={`badge ${statusInfo.color}`}>
+                          {statusInfo.label}
+                        </span>
+                      </Link>
                     </td>
                     <td style={{ fontSize: "0.85rem", whiteSpace: "nowrap" }}>
-                      {formatDate(quote.createdAt)}
+                      <Link href={`/admin/quotes/${quote.id}`} style={{ color: "inherit", textDecoration: "none" }}>
+                        {formatDate(quote.createdAt)}
+                      </Link>
                     </td>
                   </tr>
                 );

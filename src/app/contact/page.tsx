@@ -68,7 +68,7 @@ export default async function ContactPage() {
           className="section"
           style={{
             background:
-              "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(108, 92, 231, 0.1), transparent)",
+              "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59, 130, 246, 0.1), transparent)",
           }}
         >
           <div className="container">

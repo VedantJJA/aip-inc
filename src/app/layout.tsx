@@ -37,7 +37,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let themeColor = "#6c5ce7";
+  let themeColor = "#3b82f6";
   try {
     const setting = await prisma.siteSetting.findUnique({ where: { key: "theme_color" } });
     if (setting?.value) themeColor = setting.value;

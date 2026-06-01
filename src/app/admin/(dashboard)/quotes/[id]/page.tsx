@@ -90,10 +90,8 @@ export default async function QuoteDetailPage({
       </div>
 
       <div
+        className="service-detail-grid"
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 360px",
-          gap: 28,
           alignItems: "flex-start",
         }}
       >

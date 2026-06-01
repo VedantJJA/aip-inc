@@ -260,7 +260,7 @@ export default function ProjectTrackingPage() {
             />
             <defs>
               <linearGradient id="progress-gradient">
-                <stop offset="0%" stopColor="#6c5ce7" />
+                <stop offset="0%" stopColor="#3b82f6" />
                 <stop offset="100%" stopColor="#00b894" />
               </linearGradient>
             </defs>
@@ -384,7 +384,7 @@ export default function ProjectTrackingPage() {
                           fontWeight: 600,
                           padding: "2px 8px",
                           borderRadius: "var(--radius-full)",
-                          background: "rgba(108, 92, 231, 0.15)",
+                          background: "rgba(59, 130, 246, 0.15)",
                           color: "var(--accent-light)",
                         }}
                       >

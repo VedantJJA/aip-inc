@@ -25,7 +25,7 @@ export default async function HeroSection() {
           position: "absolute",
           inset: 0,
           background:
-            "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(108, 92, 231, 0.15), transparent)",
+            "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.15), transparent)",
           pointerEvents: "none",
         }}
       />
@@ -53,8 +53,8 @@ export default async function HeroSection() {
               alignItems: "center",
               gap: 8,
               padding: "8px 16px",
-              background: "rgba(108, 92, 231, 0.1)",
-              border: "1px solid rgba(108, 92, 231, 0.2)",
+              background: "rgba(59, 130, 246, 0.1)",
+              border: "1px solid rgba(59, 130, 246, 0.2)",
               borderRadius: "var(--radius-full)",
               marginBottom: 28,
               fontSize: "0.85rem",
