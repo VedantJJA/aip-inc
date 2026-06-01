@@ -66,10 +66,10 @@ export default function QuotePage() {
       .catch(() => {});
 
     // Check if customer is logged in and auto-fill their info
-    fetch("/api/auth/customer/session")
+    fetch("/api/auth/session")
       .then((r) => r.json())
       .then((data) => {
-        if (data?.user) {
+        if (data?.user?.role === "CUSTOMER") {
           setCustomer(data.user);
           if (data.user.name) setValue("clientName", data.user.name);
           if (data.user.email) setValue("clientEmail", data.user.email);

@@ -17,10 +17,10 @@ export default function Navbar() {
 
   // Check if customer session exists
   useEffect(() => {
-    fetch("/api/auth/customer/session")
+    fetch("/api/auth/session")
       .then((r) => r.json())
       .then((data) => {
-        if (data?.user) setIsLoggedIn(true);
+        if (data?.user?.role === "CUSTOMER") setIsLoggedIn(true);
       })
       .catch(() => {});
   }, []);

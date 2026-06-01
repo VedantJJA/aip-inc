@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { customerAuth } from "@/lib/customer-auth";
+import { auth } from "@/lib/auth";
 
 // GET /api/customer/quotes — list all quotes for authenticated customer
 export async function GET() {
   try {
-    const session = await customerAuth();
-    if (!session?.user?.id) {
+    const session = await auth();
+    if (!session?.user?.id || (session.user as any).role !== "CUSTOMER") {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
         { status: 401 }

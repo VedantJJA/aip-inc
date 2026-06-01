@@ -16,29 +16,42 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null;
         }
 
-        const user = await prisma.adminUser.findUnique({
-          where: { email: credentials.email as string },
+        const email = credentials.email as string;
+        const password = credentials.password as string;
+
+        // Check AdminUser first
+        const admin = await prisma.adminUser.findUnique({
+          where: { email },
         });
 
-        if (!user) {
-          return null;
+        if (admin) {
+          const match = await bcrypt.compare(password, admin.passwordHash);
+          if (!match) return null;
+          return {
+            id: admin.id,
+            email: admin.email,
+            name: admin.name,
+            role: admin.role, // "ADMIN" | "SUPER_ADMIN"
+          };
         }
 
-        const passwordMatch = await bcrypt.compare(
-          credentials.password as string,
-          user.passwordHash
-        );
+        // Then check Customer
+        const customer = await prisma.customer.findUnique({
+          where: { email },
+        });
 
-        if (!passwordMatch) {
-          return null;
+        if (customer) {
+          const match = await bcrypt.compare(password, customer.passwordHash);
+          if (!match) return null;
+          return {
+            id: customer.id,
+            email: customer.email,
+            name: customer.name,
+            role: "CUSTOMER",
+          };
         }
 
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        };
+        return null;
       },
     }),
   ],
@@ -61,6 +74,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   pages: {
-    signIn: "/admin/login",
+    signIn: "/login",
   },
 });

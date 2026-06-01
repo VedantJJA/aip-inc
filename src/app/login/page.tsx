@@ -45,14 +45,22 @@ export default function CustomerLoginPage() {
       email: loginEmail,
       password: loginPassword,
       redirect: false,
-      callbackUrl: "/dashboard",
     });
 
     if (result?.error) {
       setError("Invalid email or password");
       setLoading(false);
     } else {
-      router.push("/dashboard");
+      // Fetch session to determine role and redirect
+      const sessionRes = await fetch("/api/auth/session");
+      const session = await sessionRes.json();
+      const role = session?.user?.role;
+
+      if (role === "ADMIN" || role === "SUPER_ADMIN") {
+        router.push("/admin");
+      } else {
+        router.push("/dashboard");
+      }
       router.refresh();
     }
   };
@@ -94,11 +102,10 @@ export default function CustomerLoginPage() {
         email: regEmail,
         password: regPassword,
         redirect: false,
-        callbackUrl: "/dashboard",
       });
 
       if (signInResult?.error) {
-        setError("Account created! Please log in.");
+        setError("Account created! Please sign in.");
         setTab("login");
         setLoginEmail(regEmail);
         setLoading(false);

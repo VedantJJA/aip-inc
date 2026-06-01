@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { customerAuth } from "@/lib/customer-auth";
+import { auth } from "@/lib/auth";
 import Link from "next/link";
 import { Zap, LayoutDashboard, FolderKanban, LogOut } from "lucide-react";
 
@@ -8,10 +8,16 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await customerAuth();
+  const session = await auth();
 
   if (!session?.user) {
     redirect("/login");
+  }
+
+  // Only allow customers to access the dashboard
+  const role = (session.user as any).role;
+  if (role === "ADMIN" || role === "SUPER_ADMIN") {
+    redirect("/admin");
   }
 
   return (
@@ -144,7 +150,7 @@ export default async function DashboardLayout({
                 {session.user.name}
               </span>
               <Link
-                href="/api/auth/customer/signout"
+                href="/api/auth/signout"
                 style={{
                   color: "var(--text-muted)",
                   display: "flex",
