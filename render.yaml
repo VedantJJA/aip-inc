@@ -1,0 +1,46 @@
+# Render Blueprint Specification for AIP Inc
+# To deploy to Render, simply create a new Blueprint from your Git repository.
+# Learn more at: https://render.com/docs/blueprints
+
+services:
+  - type: web
+    name: aip-inc
+    runtime: node
+    plan: starter # Starter plan is required for persistent disks. Set to 'free' if deploying without persistent disk.
+    buildCommand: npm run build
+    startCommand: npx prisma migrate deploy && npx prisma db seed && npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      
+      # SQLite database URL
+      # - Default: file:./prisma/dev.db (local/ephemeral path for Free tier)
+      # - With persistent disk: file:/data/dev.db (highly recommended for production)
+      - key: DATABASE_URL
+        value: file:./prisma/dev.db
+
+      # NextAuth.js Security
+      # Render will automatically generate a strong random secret for AUTH_SECRET
+      - key: AUTH_SECRET
+        generateValue: true
+      
+      # Set this to your custom Render domain, e.g., https://your-app-name.onrender.com
+      - key: AUTH_URL
+        value: https://aip-inc.onrender.com
+
+      # Admin Seed Credentials (used to seed initial services and admin user)
+      - key: ADMIN_EMAIL
+        value: admin@aipinc.com
+      - key: ADMIN_PASSWORD
+        value: changeme123
+
+    # =========================================================================
+    # PERSISTENT STORAGE CONFIGURATION (RECOMMENDED FOR PRODUCTION)
+    # To prevent your database from resetting when your Render service restarts,
+    # uncomment the disk block below and set DATABASE_URL to "file:/data/dev.db" above.
+    # Note: Render Persistent Disks require a paid instance plan (Starter or higher).
+    # =========================================================================
+    # disk:
+    #   name: aip-db-disk
+    #   mountPath: /data
+    #   sizeGB: 1

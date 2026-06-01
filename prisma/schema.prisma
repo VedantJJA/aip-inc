@@ -1,0 +1,108 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// Note: SQLite doesn't support native enums — we use String fields with
+// application-level validation via Zod instead.
+
+// ─── Models ─────────────────────────────────────────────────────────────────────
+
+model Service {
+  id               String   @id @default(cuid())
+  title            String
+  slug             String   @unique
+  category         String   // "SOFTWARE" | "HARDWARE"
+  description      String
+  shortDescription String
+  startingPrice    Int      // Price in cents (e.g., 49900 = $499.00)
+  features         String   // JSON array stored as string
+  iconName         String   @default("globe")
+  isActive         Boolean  @default(true)
+  displayOrder     Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  quoteRequests QuoteRequest[]
+
+  @@map("services")
+}
+
+model QuoteRequest {
+  id             String   @id @default(cuid())
+  clientName     String
+  clientEmail    String
+  clientPhone    String?
+  companyName    String?
+  serviceId      String
+  projectDetails String
+  budget         String   // "UNDER_1K" | "ONE_TO_5K" | etc.
+  timeline       String   // "ASAP" | "ONE_MONTH" | etc.
+  status         String   @default("NEW") // "NEW" | "REVIEWED" | "CONTACTED" | "CLOSED"
+  adminNotes     String?
+  assignedToId   String?  // Relation to single TeamMember
+  assignedTeamId String?  // Relation to group Team
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  assignedTo TeamMember?  @relation(fields: [assignedToId], references: [id])
+  assignedTeam Team?      @relation(fields: [assignedTeamId], references: [id])
+
+  @@map("quote_requests")
+}
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  label     String
+  group     String   // "CONTACT" | "BRANDING" | "SOCIAL"
+  updatedAt DateTime @updatedAt
+
+  @@map("site_settings")
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("ADMIN") // "SUPER_ADMIN" | "ADMIN"
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("admin_users")
+}
+
+model TeamMember {
+  id           String   @id @default(cuid())
+  name         String
+  role         String   @default("Developer")
+  email        String?
+  teamId       String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  team           Team? @relation(fields: [teamId], references: [id])
+  assignedQuotes QuoteRequest[]
+
+  @@map("team_members")
+}
+
+model Team {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members        TeamMember[]
+  assignedQuotes QuoteRequest[]
+
+  @@map("teams")
+}
